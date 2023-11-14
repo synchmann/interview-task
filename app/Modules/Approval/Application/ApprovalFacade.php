@@ -19,6 +19,22 @@ final readonly class ApprovalFacade implements ApprovalFacadeInterface
     ) {
     }
 
+    public function changeStatus(ApprovalDto $dto): true
+    {
+        switch ($dto->status->value) {
+            case StatusEnum::APPROVED->value:
+                $this->approve($dto);
+                break;
+            case StatusEnum::REJECTED->value:
+                $this->reject($dto);
+                break;
+            default:
+                throw new LogicException(sprintf("We can't set status to: %s", $dto->status->value));
+        }
+
+        return true;
+    }
+
     public function approve(ApprovalDto $dto): true
     {
         $this->validate($dto);
